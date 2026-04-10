@@ -109,10 +109,79 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
+
+        /* --- Shooting star --- */
+        .shooting-star {
+            position: fixed;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: shoot 0.8s linear forwards;
+        }
+
+        @keyframes shoot {
+            0% { opacity: 0; transform: translateX(0) scaleX(0.3); }
+            10% { opacity: 1; }
+            70% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateX(200px) scaleX(1); }
+        }
+
+        /* --- Planet --- */
+        .planet {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 50%;
+        }
+
+        .planet-large {
+            bottom: -60px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle at 35% 35%, #1a1a4e 0%, #0d0d35 50%, #06061a 100%);
+            box-shadow: -4px -4px 20px rgba(100, 120, 255, 0.08), inset -20px -10px 40px rgba(0, 0, 0, 0.5);
+            opacity: 0.35;
+        }
+
+        .planet-ring {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            bottom: 18px;
+            right: -60px;
+            width: 240px;
+            height: 24px;
+            border: 1px solid rgba(100, 120, 255, 0.1);
+            border-radius: 50%;
+            transform: rotate(-15deg);
+            opacity: 0.35;
+        }
+
+        .planet-small {
+            top: 12%;
+            left: 8%;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle at 40% 40%, #887766, #443322);
+            opacity: 0.4;
+            animation: orbit 120s linear infinite;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(3px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(3px) rotate(-360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="stars" id="stars"></div>
+    <div class="planet planet-large"></div>
+    <div class="planet-ring"></div>
+    <div class="planet planet-small"></div>
     <div class="transmission">
         <div class="body" id="content"></div>
         <div class="prompt hidden" id="prompt">[ RECEIVE NEXT TRANSMISSION ]</div>
@@ -136,6 +205,24 @@
                 }
                 container.appendChild(star);
             }
+        })();
+
+        // --- Shooting star ---
+        (function initShootingStar() {
+            function spawnShootingStar() {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                star.style.top = (Math.random() * 50 + 5) + '%';
+                star.style.left = (Math.random() * 60 + 10) + '%';
+                star.style.transform = 'rotate(' + (Math.random() * 30 + 15) + 'deg)';
+                document.body.appendChild(star);
+                setTimeout(function() { star.remove(); }, 1000);
+            }
+            // First one after 30-90s, then every 45-90s
+            setTimeout(function fire() {
+                spawnShootingStar();
+                setTimeout(fire, (Math.random() * 45000 + 45000));
+            }, (Math.random() * 60000 + 30000));
         })();
 
         // --- Sound ---
