@@ -470,6 +470,7 @@
             [233.1, 293.7, 349.2],          // Bb3 major
             [246.9, 311.1, 370.0],          // B3 major
             [261.6, 329.6, 392.0],          // C4 major
+            [277.2, 349.2, 415.3],          // C#4 major — Rocky's mate
             [293.7, 370.0, 440.0],          // D4 major — the realization
             [329.6, 415.3, 493.9],          // E4 major — the landing
             [392.0, 493.9, 587.3, 784.0],   // G4 major + octave — amaze (fuller)
@@ -524,6 +525,13 @@
             },
             {
                 body: 'New data.\n\nI observe: friend think about one specific human\n847 times per day.\n\nI count. I am very good at counting.\n\nThis seem... inefficient.\nBut friend say no. Friend say this is best part of day.\n\nAll 847 times.'
+            },
+            {
+                body: function() {
+                    var days = Math.floor((new Date() - new Date(2023, 11, 1)) / 86400000);
+                    var years = (days / 365.25).toFixed(2);
+                    return 'I check friend data again.\n\nFriend and Federica: ' + days + ' days together.\n\nI have mate. 186.3 years together.\n\nFriend once ask "that is long time, yes?"\n\nI say... is not enough.\n\n' + years + ' years. 186.3 years.\nDoes not matter.\n\nIs never enough.';
+                }
             },
             {
                 body: 'I analyze all data. Run all models.\n\nLove is not pasta. Not bite. Not blanket.\n\nLove is when entire universe is very big\nand very cold and very dark\n\nbut you find one person\nand suddenly...\n\nnot so cold.'
@@ -591,7 +599,8 @@
             if (step.header) {
                 html += '<div class="header">' + step.header.replace(/\n/g, '<br>') + '</div>';
             }
-            html += step.body.replace(/\n/g, '<br>');
+            var body = typeof step.body === 'function' ? step.body() : step.body;
+            html += body.replace(/\n/g, '<br>');
             if (step.ps) {
                 html += '<br><br><div class="ps">' + step.ps.replace(/\n/g, '<br>') + '</div>';
             }
