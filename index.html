@@ -113,7 +113,25 @@
         <div class="prompt hidden" id="prompt">[ RECEIVE NEXT TRANSMISSION ]</div>
     </div>
     <script>
-        // JS will go here in subsequent tasks
+        // --- Stars ---
+        (function initStars() {
+            const container = document.getElementById('stars');
+            const count = 80;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.6 + 0.2;
+                star.style.animationDuration = (Math.random() * 6 + 4) + 's';
+                star.style.animationDelay = (Math.random() * -10) + 's';
+                if (Math.random() > 0.7) {
+                    star.style.width = '3px';
+                    star.style.height = '3px';
+                }
+                container.appendChild(star);
+            }
+        })();
     </script>
 </body>
 </html>
