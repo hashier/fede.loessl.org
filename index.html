@@ -445,11 +445,11 @@
             document.body.appendChild(wrapper);
             setTimeout(function() { wrapper.remove(); }, 1000);
         }
-        // Auto: first one after 15-30s, then every 20-45s
+        // Auto: first one after 5-10s, then every 8-20s
         setTimeout(function fire() {
             spawnShootingStar();
-            setTimeout(fire, (Math.random() * 25000 + 20000));
-        }, (Math.random() * 15000 + 15000));
+            setTimeout(fire, (Math.random() * 12000 + 8000));
+        }, (Math.random() * 5000 + 5000));
 
         // --- Sound ---
         let audioCtx = null;
