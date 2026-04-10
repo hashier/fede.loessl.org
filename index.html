@@ -132,6 +132,78 @@
                 container.appendChild(star);
             }
         })();
+
+        // --- Script ---
+        const steps = [
+            {
+                header: '▸ ERIDIAN TRANSMISSION DETECTED\n▸ SOURCE: ROCKY\n▸ FREQUENCY: ♫♫♫\n▸ DECRYPTING...',
+                body: 'I have question.\nVery important question.\n\nWhat is... love?'
+            },
+            {
+                body: 'I ask friend. Friend no help. Friend just smile.\n\nSo I make hypothesis.\n\nHypothesis 1:\nLove = when human make food for other human.\n\nVery specific human. Italian human.\nFood is... very good. Friend eat too much. Every time.\n\nBut no. This is not love.\nThis is just... pasta.'
+            },
+            {
+                body: 'Hypothesis 2:\nLove = when human bite other human.\n\nThis make no sense. On Erid, bite = danger.\nBut this human call it "love bite."\n\nI check data. Friend not injured. Friend... happy?\n\nHumans are very confusing species.'
+            },
+            {
+                body: 'Hypothesis 3:\nLove = when human share one big blanket\neven though other human want two normal blanket.\n\nTwo blanket is logical. Efficient. Good engineering.\nOne blanket is... chaos.\n\nBut she insist. One blanket. Together.\nAnd he stay under the one blanket.\n\nEvery night.\n\n...interesting.'
+            },
+            {
+                body: 'New data.\n\nI observe: friend think about one specific human\n847 times per day.\n\nI count. I am very good at counting.\n\nThis seem... inefficient.\nBut friend say no. Friend say this is best part of day.\n\nAll 847 times.'
+            },
+            {
+                body: 'I analyze all data. Run all models.\n\nLove is not pasta. Not bite. Not blanket.\n\nLove is when entire universe is very big\nand very cold and very dark\n\nbut you find one person\nand suddenly...\n\nnot so cold.'
+            },
+            {
+                body: 'So.\n\nFederica.\n\nI check my friend\'s data one more time.\nI look at all the evidence.\n\nConclusion:\n\nLove = Federica.\n\nThis is not hypothesis. This is fact.\nPeer reviewed. By me. Rocky. Very good scientist.'
+            },
+            {
+                body: 'Amaze amaze amaze. ♫♫♫\n\nEnd transmission.',
+                ps: 'P.S. — He love you very much.\nEven when you bite him.\n\nEspecially when you bite him.\n\nHumans. So strange. So good.'
+            }
+        ];
+
+        // --- Navigation ---
+        let currentStep = -1;
+        const contentEl = document.getElementById('content');
+        const promptEl = document.getElementById('prompt');
+
+        function showStep(index) {
+            const step = steps[index];
+            let html = '';
+            if (step.header) {
+                html += '<div class="header">' + step.header.replace(/\n/g, '<br>') + '</div>';
+            }
+            html += step.body.replace(/\n/g, '<br>');
+            if (step.ps) {
+                html += '<br><br><div class="ps">' + step.ps.replace(/\n/g, '<br>') + '</div>';
+            }
+            contentEl.innerHTML = html;
+
+            if (index < steps.length - 1) {
+                promptEl.classList.remove('hidden');
+            } else {
+                promptEl.classList.add('hidden');
+            }
+        }
+
+        function advance() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        document.body.addEventListener('click', advance);
+        document.body.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                advance();
+            }
+        });
+
+        // Show first step
+        advance();
     </script>
 </body>
 </html>
