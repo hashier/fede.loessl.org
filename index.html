@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transmission from Rocky</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a2e 0%, #1a1a4e 50%, #0d0d35 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        /* --- Stars --- */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            from { transform: translateY(0); opacity: 0.8; }
+            50% { opacity: 0.3; }
+            to { transform: translateY(30px); opacity: 0.8; }
+        }
+
+        /* --- Transmission container --- */
+        .transmission {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            width: 90%;
+            padding: 32px 24px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff88;
+            line-height: 1.6;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .transmission .header {
+            font-size: 11px;
+            color: rgba(0, 255, 136, 0.27);
+            margin-bottom: 16px;
+            line-height: 1.8;
+            text-shadow: none;
+        }
+
+        .transmission .body {
+            white-space: pre-wrap;
+            min-height: 200px;
+        }
+
+        .transmission .ps {
+            font-size: 12px;
+            color: rgba(0, 255, 136, 0.33);
+            text-shadow: none;
+        }
+
+        .prompt {
+            text-align: center;
+            font-size: 12px;
+            color: rgba(0, 255, 136, 0.22);
+            margin-top: 40px;
+            letter-spacing: 1px;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: none;
+        }
+
+        .prompt.hidden {
+            visibility: hidden;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="transmission">
+        <div class="body" id="content"></div>
+        <div class="prompt hidden" id="prompt">[ RECEIVE NEXT TRANSMISSION ]</div>
+    </div>
+    <script>
+        // JS will go here in subsequent tasks
+    </script>
+</body>
+</html>
