@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transmission from Rocky</title>
+    <meta name="description" content="A transmission from Rocky">
+    <meta property="og:title" content="Transmission from Rocky">
+    <meta property="og:description" content="An important message has been received.">
+    <meta name="robots" content="noindex">
     <style>
         * {
             margin: 0;
@@ -78,6 +82,7 @@
         .transmission .body {
             white-space: pre-wrap;
             min-height: 200px;
+            transition: opacity 0.15s;
         }
 
         .transmission .ps {
@@ -284,11 +289,15 @@
         function showStep(index) {
             const html = buildHtml(steps[index]);
             promptEl.classList.add('hidden');
-            typewrite(contentEl, html, function() {
-                if (index < steps.length - 1) {
-                    promptEl.classList.remove('hidden');
-                }
-            });
+            contentEl.style.opacity = '0';
+            setTimeout(function() {
+                contentEl.style.opacity = '1';
+                typewrite(contentEl, html, function() {
+                    if (index < steps.length - 1) {
+                        promptEl.classList.remove('hidden');
+                    }
+                });
+            }, 150);
         }
 
         function advance() {
