@@ -168,8 +168,51 @@
         const contentEl = document.getElementById('content');
         const promptEl = document.getElementById('prompt');
 
-        function showStep(index) {
-            const step = steps[index];
+        // --- Typewriter ---
+        let isAnimating = false;
+        let animationTimer = null;
+
+        function typewrite(element, html, callback) {
+            isAnimating = true;
+            let i = 0;
+            element.innerHTML = '';
+
+            function tick() {
+                if (i >= html.length) {
+                    isAnimating = false;
+                    if (callback) callback();
+                    return;
+                }
+                // If we hit a '<', skip ahead to '>' (render full tag at once)
+                if (html[i] === '<') {
+                    const closeIndex = html.indexOf('>', i);
+                    if (closeIndex !== -1) {
+                        i = closeIndex + 1;
+                        element.innerHTML = html.substring(0, i);
+                        animationTimer = setTimeout(tick, 0);
+                        return;
+                    }
+                }
+                i++;
+                element.innerHTML = html.substring(0, i);
+                // Pause longer after line breaks
+                const justRendered = html.substring(Math.max(0, i - 4), i);
+                const delay = justRendered.endsWith('<br>') ? 120 : 35;
+                animationTimer = setTimeout(tick, delay);
+            }
+
+            tick();
+        }
+
+        function skipAnimation() {
+            if (animationTimer) {
+                clearTimeout(animationTimer);
+                animationTimer = null;
+            }
+            isAnimating = false;
+        }
+
+        function buildHtml(step) {
             let html = '';
             if (step.header) {
                 html += '<div class="header">' + step.header.replace(/\n/g, '<br>') + '</div>';
@@ -178,16 +221,29 @@
             if (step.ps) {
                 html += '<br><br><div class="ps">' + step.ps.replace(/\n/g, '<br>') + '</div>';
             }
-            contentEl.innerHTML = html;
+            return html;
+        }
 
-            if (index < steps.length - 1) {
-                promptEl.classList.remove('hidden');
-            } else {
-                promptEl.classList.add('hidden');
-            }
+        function showStep(index) {
+            const html = buildHtml(steps[index]);
+            promptEl.classList.add('hidden');
+            typewrite(contentEl, html, function() {
+                if (index < steps.length - 1) {
+                    promptEl.classList.remove('hidden');
+                }
+            });
         }
 
         function advance() {
+            if (isAnimating) {
+                // Skip to end of current animation
+                skipAnimation();
+                contentEl.innerHTML = buildHtml(steps[currentStep]);
+                if (currentStep < steps.length - 1) {
+                    promptEl.classList.remove('hidden');
+                }
+                return;
+            }
             if (currentStep < steps.length - 1) {
                 currentStep++;
                 showStep(currentStep);
