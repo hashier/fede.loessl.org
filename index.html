@@ -133,6 +133,63 @@
             }
         })();
 
+        // --- Sound ---
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    // Web Audio not available — page works silently
+                }
+            }
+        }
+
+        // Chord definitions — ascending root notes, each is an array of frequencies
+        const chords = [
+            [196.0, 246.9, 293.7],          // G3 major — opening
+            [220.0, 277.2, 329.6],          // A3 major
+            [233.1, 293.7, 349.2],          // Bb3 major
+            [246.9, 311.1, 370.0],          // B3 major
+            [261.6, 329.6, 392.0],          // C4 major
+            [293.7, 370.0, 440.0],          // D4 major — the realization
+            [329.6, 415.3, 493.9],          // E4 major — the landing
+            [392.0, 493.9, 587.3, 784.0],   // G4 major + octave — amaze (fuller)
+        ];
+
+        function playChord(index) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const freqs = chords[index] || chords[0];
+            const isFinal = index === chords.length - 1;
+            const now = audioCtx.currentTime;
+            const duration = isFinal ? 2.5 : 1.2;
+
+            freqs.forEach(function(freq, i) {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                // Mix triangle and sine for warmth
+                osc.type = i === 0 ? 'triangle' : 'sine';
+                osc.frequency.value = freq;
+
+                // Gentle envelope
+                const volume = isFinal ? 0.08 : 0.06;
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(volume, now + 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + duration);
+            });
+        }
+
         // --- Script ---
         const steps = [
             {
@@ -235,6 +292,7 @@
         }
 
         function advance() {
+            initAudio();
             if (isAnimating) {
                 // Skip to end of current animation
                 skipAnimation();
@@ -246,6 +304,7 @@
             }
             if (currentStep < steps.length - 1) {
                 currentStep++;
+                playChord(currentStep);
                 showStep(currentStep);
             }
         }
